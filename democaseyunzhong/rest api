@@ -1,0 +1,114 @@
+Pre-requirement: 
+                  mac os 
+               1. install docker 
+               2. node 8 or uper vision
+             
+Installation: 
+                1. Install CLI tool: 
+                   
+                   npm install -g composer-cli@0.20.8
+                   npm install -g composer-rest-server@0.20.8
+                   npm install -g generator-hyperledger-composer@0.20.8
+                   npm install -g yo
+
+                2. Install playground:
+
+                   npm install -g composer-playground@0.20.8
+                
+                3. Install Hyperledger Fabric
+
+                   mkdir ~/fabric-dev-servers && cd ~/fabric-dev-servers
+                   curl -O https://raw.githubusercontent.com/hyperledger/composer-tools/master/packages/fabric-dev-servers/fabric-dev-servers.tar.gz
+                   tar -xvf fabric-dev-servers.tar.gz
+
+                   Download Fabric 
+                   
+                   cd ~/fabric-dev-servers
+                   export FABRIC_VERSION=hlfv12
+                   ./downloadFabric.sh
+                
+
+Start Hyperledger Fabric 
+
+Step 0: start docker
+
+
+Step 1 : start hyperleger 
+
+copy and paste the following: 
+
+cd ~/fabric-dev-servers
+    export FABRIC_VERSION=hlfv12
+    ./startFabric.sh
+    ./createPeerAdminCard.sh
+
+
+step 2 : Deploying the business network
+
+cd back to the folder where you store bna file 
+
+copy and paste the following: 
+
+composer network install --card PeerAdmin@hlfv1 --archiveFile democaseyunzhong@0.0.1.bna
+
+
+step 3 : To start the business network
+
+copy and paste the following
+
+composer network start --networkName democaseyunzhong --networkVersion 0.0.1 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
+
+
+step 4: To import the network administrator identity 
+
+copy and paste the following
+
+composer card import --file networkadmin.card
+
+
+step 5: To check that the business network has been deployed successfully
+
+copy and paste the following:
+
+composer network ping --card admin@democaseyunzhong
+
+
+step 6: start rest api 
+
+copy and paste the following:
+
+composer-rest-server
+
+
+after entry this command, go through the following questions
+----------------------------------------------------------------------------------
+Enter the name of the business network card to use: admin@democaseyunzhong
+? Specify if you want namespaces in the generated REST API: never use namespaces
+
+
+? Specify if you want to use an API key to secure the REST API: No
+? Specify if you want to enable authentication for the REST API using Passport: 
+No
+? Specify if you want to enable the explorer test interface: Yes
+? Specify a key if you want to enable dynamic logging: haohanqi
+? Specify if you want to enable event publication over WebSockets: Yes
+? Specify if you want to enable TLS security for the REST API: No
+
+
+
+As result  Business network version: 0.0.1
+	       Composer runtime version: 0.20.8
+           Fabric vision is hlfv12
+
+
+
+
+
+
+
+
+
+
+
+
+

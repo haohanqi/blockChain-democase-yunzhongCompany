@@ -1,0 +1,153 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Write your model definitions here
+ */
+
+namespace org.example.yunzhong
+
+asset SampleAsset identified by assetId {
+  o String assetId
+  --> SampleParticipant owner
+  o String value
+}
+
+participant SampleParticipant identified by participantId {
+  o String participantId
+  o String firstName
+  o String lastName
+}
+
+transaction SampleTransaction {
+  --> SampleAsset asset
+  o String newValue
+}
+
+
+
+//-------------------------------------------------
+abstract participant User identified by userID {
+  o String userID
+  o String companyName
+  o String companyAddress
+  o String email
+  o String tel
+  o String website
+
+} 
+
+participant Buyer extends User {
+ o PI pi optional
+ o DateTime receiveDate optional 
+ o Agreement agreement
+}
+
+participant Seller extends User {
+  o Double score default=100.00 
+  o PI pi optional
+  o String buyerStatus default="disagreed"
+  o Agreement agreement default = "agreed"
+}
+
+
+transaction makeDecision {
+  o Agreement agreement 
+  --> Buyer buyer
+  --> Seller seller
+  --> PI pi
+}
+
+transaction transDownpayment{
+  --> Seller seller
+  --> Buyer buyer
+  -->PI pi
+  o Double downPayment
+}
+
+
+
+transaction initializePI {
+  o String piNumber
+  o PaymentTerm dowmPayment 
+  o Integer deliverDate 
+  --> Buyer buyer// provide toAddress
+  --> Seller seller // add new PI into seller
+
+}
+
+transaction addProductsToPI {
+  --> Product product 
+  --> PI pi // add product into according pi products[], and colculate total price
+  --> Seller seller 
+}
+
+transaction addBankInformationToPI {
+  o BankInfo bankInformation
+  --> PI pi // add bank information into accdoring pi 
+}
+
+transaction sendPI {
+  -->Seller seller
+  -->Buyer buyer
+}
+
+
+asset PI identified by piNumber {
+  o String piNumber // done
+  o String toAddress // done (from buyer address)
+  o Integer deliverDate // done 
+  o Product[] products     // done (from addproduct) 
+  o PaymentTerm dowmPayment // done
+  o Double totalCost    // done (from addproduct)
+  o Double totalDownpayment optional // calculate total amount of downPayment accdoring to totalcost and payment term
+  o DateTime downPaymentClearDate optional
+  o DateTime totalPaymentClearDate optional
+  o BankInfo bankInformation optional 
+  o DateTime validatePIdate optional 
+  o String PIstatus optional 
+}
+
+asset Product identified by productCode {
+  o String productCode
+  o String productName
+  o String ProductSize
+  o String description 
+  o Double qty
+  o Double unitPrice
+
+  
+}
+
+concept BankInfo {
+  o String companyName
+  o String companyAddress
+  o String bankName
+  o String accountOwner
+  o String swiftCode 
+
+}
+
+enum Agreement {
+  o disagreed
+  o agreed
+}
+
+enum PaymentTerm {
+ o tenPercent 
+ o thirtyPercent
+ o half
+ o all
+}
+

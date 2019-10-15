@@ -1,0 +1,36 @@
+{
+  "engines": {
+    "composer": "^0.20.8"
+  },
+  "name": "democaseyunzhong",
+  "version": "0.0.1",
+  "description": "demo case based on yun zhong",
+  "scripts": {
+    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/democaseyunzhong.bna",
+    "pretest": "npm run lint",
+    "lint": "eslint .",
+    "test": "nyc mocha -t 0 test/*.js && cucumber-js"
+  },
+  "keywords": [
+    "composer",
+    "composer-network"
+  ],
+  "author": "haohanqi",
+  "email": "haohanqiharry@gmail.com",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "chai": "latest",
+    "chai-as-promised": "latest",
+    "composer-admin": "^0.19.20",
+    "composer-cli": "^0.20.8",
+    "composer-client": "^0.19.20",
+    "composer-common": "^0.19.20",
+    "composer-connector-embedded": "^0.19.20",
+    "composer-cucumber-steps": "^0.19.20",
+    "cucumber": "^2.2.0",
+    "eslint": "latest",
+    "mkdirp": "latest",
+    "mocha": "latest",
+    "nyc": "latest"
+  }
+}
